@@ -40,6 +40,12 @@ public class EmployeeService : IEmployeeService
                 .Include(e => e.Department)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
+        public async Task<Employee?> GetByEmailAsync(string email)
+        {
+            return await _context.Employees
+                .Include(e => e.Department)
+                .FirstOrDefaultAsync(e => e.Email.ToLower().Trim() == email.ToLower().Trim());
+        }
 
         public async Task<Employee> CreateAsync(Employee employee)
         {

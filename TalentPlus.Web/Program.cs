@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -35,6 +36,8 @@ var secretKey = jwtSettings["Secret"];
 
 // Safety check: ensure key exists
 if (string.IsNullOrEmpty(secretKey)) throw new Exception("JWT Secret is missing in appsettings.json");
+
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 builder.Services.AddAuthentication(options =>
     {
@@ -110,7 +113,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<TalentPlus.Application.Interfaces.IExcelService, TalentPlus.Infraestructure.Services.ExcelService>();
 builder.Services.AddScoped<TalentPlus.Application.Interfaces.IEmployeeService, TalentPlus.Infraestructure.Services.EmployeeService>();
 builder.Services.AddScoped<TalentPlus.Application.Interfaces.IPdfService, TalentPlus.Infraestructure.Services.PdfService>();
-
+builder.Services.AddScoped<TalentPlus.Application.Interfaces.IEmailService, TalentPlus.Infraestructure.Services.SmtpEmailService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
