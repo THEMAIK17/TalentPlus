@@ -1,0 +1,6 @@
+@TalentPlus.Web_HostAddress = http://localhost:5195
+
+GET {{TalentPlus.Web_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
