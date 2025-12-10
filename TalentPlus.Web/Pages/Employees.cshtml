@@ -1,0 +1,110 @@
+@page
+@model TalentPlus.Web.Pages.EmployeesModel
+@{
+    ViewData["Title"] = "Directorio de Empleados";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary"><i class="fa-solid fa-address-book me-2"></i>Directorio</h2>
+    <a href="/Import" class="btn btn-success shadow-sm">
+        <i class="fa-solid fa-file-excel me-2"></i>Cargar Nuevos
+    </a>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-10">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fa-solid fa-search text-muted"></i></span>
+                    <input type="text" name="Search" value="@Model.Search" class="form-control border-start-0" placeholder="Buscar por nombre, apellido o cédula...">
+                </div>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Empleado</th>
+                        <th>Departamento</th>
+                        <th>Cargo</th>
+                        <th>Fecha Ingreso</th>
+                        <th>Estado</th>
+                        <th class="text-end pe-4">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.EmployeesList.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <i class="fa-solid fa-inbox fa-3x mb-3"></i>
+                                <p>No se encontraron empleados.</p>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var emp in Model.EmployeesList)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar bg-light text-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-weight: bold;">
+                                            @emp.FirstName.Substring(0,1)@emp.LastName.Substring(0,1)
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark">@emp.FirstName @emp.LastName</div>
+                                            <small class="text-muted">CC: @emp.DocumentNumber</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">
+                                        @(emp.Department?.Name ?? "Sin Dept")
+                                    </span>
+                                </td>
+                                <td>@emp.Position</td>
+                                <td>@emp.HiringDate.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    @if(emp.Status == "Activo" || emp.Status == "Active")
+                                    {
+                                        <span class="badge bg-success bg-opacity-10 text-success px-3">Activo</span>
+                                    }
+                                    else if(emp.Status == "Inactivo")
+                                    {
+                                        <span class="badge bg-danger bg-opacity-10 text-danger px-3">Inactivo</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning bg-opacity-10 text-warning px-3">@emp.Status</span>
+                                    }
+                                </td>
+                                <td class="text-end pe-4">
+                                    <a asp-page="./Edit" asp-route-id="@emp.Id" class="btn btn-sm btn-outline-secondary" title="Editar">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@emp.Id" class="d-inline" 
+                                          onsubmit="return confirm('¿Estás seguro de que deseas eliminar a @emp.FirstName @emp.LastName?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

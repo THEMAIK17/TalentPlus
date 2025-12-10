@@ -1,0 +1,57 @@
+@page
+@model TalentPlus.Web.Pages.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2 class="mb-4"><i class="fa-solid fa-chart-line me-2"></i>Dashboard Gerencial</h2>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary shadow h-100">
+            <div class="card-body">
+                <h5 class="card-title">Total Empleados</h5>
+                <p class="display-4 fw-bold">@Model.TotalEmployees</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success shadow h-100">
+            <div class="card-body">
+                <h5 class="card-title">Activos</h5>
+                <p class="display-4 fw-bold">@Model.ActiveCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger shadow h-100">
+            <div class="card-body">
+                <h5 class="card-title">Nómina Mensual</h5>
+                <p class="display-6 fw-bold">$ @Model.TotalPayroll.ToString("N0")</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow">
+    <div class="card-header bg-white fw-bold">Empleados por Departamento</div>
+    <div class="card-body p-0">
+        <table class="table table-striped mb-0">
+            <thead class="table-dark">
+            <tr>
+                <th>Departamento</th>
+                <th>Cantidad</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach(var item in Model.DeptStats)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Count</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
