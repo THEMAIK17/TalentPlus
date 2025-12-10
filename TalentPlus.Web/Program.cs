@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using QuestPDF.Infrastructure;
 using TalentPlus.Infraestructure.Identity;
 using TalentPlus.Infraestructure.Persistence;
 
@@ -55,7 +56,8 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
         };
     });
-
+//  CONFIGURE QUESTPDF LICENSE 
+QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddRazorPages();
 
 //  WEB SERVICES 
@@ -104,11 +106,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Register the Excel Service
+// Register the Services
 builder.Services.AddScoped<TalentPlus.Application.Interfaces.IExcelService, TalentPlus.Infraestructure.Services.ExcelService>();
-
-// Register the Employee Service
 builder.Services.AddScoped<TalentPlus.Application.Interfaces.IEmployeeService, TalentPlus.Infraestructure.Services.EmployeeService>();
+builder.Services.AddScoped<TalentPlus.Application.Interfaces.IPdfService, TalentPlus.Infraestructure.Services.PdfService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
