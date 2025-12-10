@@ -37,9 +37,9 @@ if (string.IsNullOrEmpty(secretKey)) throw new Exception("JWT Secret is missing 
 
 builder.Services.AddAuthentication(options =>
     {
-        // I set JWT as the default authentication scheme
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        
+        options.DefaultScheme = IdentityConstants.ApplicationScheme;
+        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
     .AddJwtBearer(options =>
     {
@@ -55,6 +55,16 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
         };
     });
+
+builder.Services.AddRazorPages();
+
+//  WEB SERVICES 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
+
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -135,6 +145,7 @@ app.MapGet("/weatherforecast", () =>
 .WithOpenApi();
 
 app.MapControllers();
+app.MapRazorPages();
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)

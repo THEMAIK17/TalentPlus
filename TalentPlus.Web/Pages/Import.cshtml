@@ -1,0 +1,41 @@
+@page
+@model TalentPlus.Web.Pages.ImportModel
+@{
+    ViewData["Title"] = "Carga Masiva";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="fa-solid fa-file-excel me-2"></i>Importar Empleados</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Sube el archivo <strong>.xlsx</strong> con la nómina. El sistema actualizará los empleados existentes y creará los nuevos automáticamente.
+                </p>
+                
+                <form method="post" enctype="multipart/form-data">
+                    
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-4">
+                        <label asp-for="Upload" class="form-label fw-bold">Seleccionar Archivo Excel</label>
+                        <input asp-for="Upload" class="form-control form-control-lg" type="file" accept=".xlsx" />
+                        <span asp-validation-for="Upload" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fa-solid fa-cloud-arrow-up me-2"></i>Procesar Archivo
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
