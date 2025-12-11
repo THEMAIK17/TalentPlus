@@ -1,0 +1,43 @@
+services:
+  # Service 1: PostgreSQL Database
+  db:
+    image: public.ecr.aws/docker/library/postgres:15
+    container_name: talentplus_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: Password123! 
+      POSTGRES_DB: TalentPlusDb
+    ports:
+      - "5438:5432" 
+    volumes:
+      - postgres_data:/var/lib/postgresql/data 
+
+  # Service 2: .NET Application
+  web:
+    build:
+      context: .
+      dockerfile: TalentPlus.Web/Dockerfile
+    container_name: talentplus_web
+    depends_on:
+      - db
+    ports:
+      - "5200:8080" 
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=TalentPlusDb;Username=admin;Password=Password123!;
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Smtp__User=maikold774@gmail.com
+      - Smtp__Password=hxqb sgfe zqia qdoe
+      - Gemini__ApiKey=TU_API_KEY_AQUI
+    restart: on-failure
+  # Service 3: Unit Tests
+  tests:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: talentplus_tests
+    volumes:
+      - .:/src  
+    working_dir: /src
+    command: >
+      bash -c "dotnet test TalentPlus.Tests/TalentPlus.Tests.csproj --logger:console; echo 'PRUEBAS FINALIZADAS'"
+    profiles: [ "testing" ] 
+volumes:
+  postgres_data:

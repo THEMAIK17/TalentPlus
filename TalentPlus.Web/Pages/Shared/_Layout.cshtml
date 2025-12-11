@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TalentPlus HR</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/Dashboard"><i class="fa-solid fa-users-gear me-2"></i>TalentPlus</a>
+            
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    @using Microsoft.AspNetCore.Identity
+                    @using TalentPlus.Infraestructure.Identity
+                    @inject SignInManager<AppUser> SignInManager
+
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li class="nav-item"><a class="nav-link" href="/Dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Employees">Employees</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link text-success fw-bold" href="/Import">
+                                <i class="fa-solid fa-upload"></i> Carga Masiva
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-warning fw-bold" href="/Login?handler=Logout">
+                                <i class="fa-solid fa-sign-out-alt"></i> Logout
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a class="nav-link" href="/Login">Login</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
