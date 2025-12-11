@@ -29,6 +29,15 @@ services:
       - Smtp__Password=hxqb sgfe zqia qdoe
       - Gemini__ApiKey=TU_API_KEY_AQUI
     restart: on-failure
-
+  # Service 3: Unit Tests
+  tests:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: talentplus_tests
+    volumes:
+      - .:/src  
+    working_dir: /src
+    command: >
+      bash -c "dotnet test TalentPlus.Tests/TalentPlus.Tests.csproj --logger:console; echo 'PRUEBAS FINALIZADAS'"
+    profiles: [ "testing" ] 
 volumes:
   postgres_data:
