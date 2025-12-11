@@ -1,0 +1,34 @@
+services:
+  # Service 1: PostgreSQL Database
+  db:
+    image: public.ecr.aws/docker/library/postgres:15
+    container_name: talentplus_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: Password123! 
+      POSTGRES_DB: TalentPlusDb
+    ports:
+      - "5438:5432" 
+    volumes:
+      - postgres_data:/var/lib/postgresql/data 
+
+  # Service 2: .NET Application
+  web:
+    build:
+      context: .
+      dockerfile: TalentPlus.Web/Dockerfile
+    container_name: talentplus_web
+    depends_on:
+      - db
+    ports:
+      - "5200:8080" 
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=TalentPlusDb;Username=admin;Password=Password123!;
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Smtp__User=maikold774@gmail.com
+      - Smtp__Password=hxqb sgfe zqia qdoe
+      - Gemini__ApiKey=TU_API_KEY_AQUI
+    restart: on-failure
+
+volumes:
+  postgres_data:

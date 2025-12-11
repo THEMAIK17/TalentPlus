@@ -128,7 +128,37 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization(); 
 
+app.MapControllers();
+app.MapRazorPages();
 
+// This block executes every time the app starts to ensure DB exists and has data
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        var userManager = services.GetRequiredService<UserManager<AppUser>>();
+        
+        context.Database.Migrate();
+        
+        await TalentPlus.Infraestructure.Persistence.DbInitializer.SeedDataAsync(context, userManager);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred creating the DB or Seeding data.");
+    }
+}
+
+Console.WriteLine("\n\n");
+Console.WriteLine("===========================================================");
+Console.WriteLine("    TALENTPLUS SYSTEM STARTED SUCCESSFULLY!  ");
+Console.WriteLine("===========================================================");
+Console.WriteLine("   >  Web Login:    http://localhost:5200/Login");
+Console.WriteLine("   >  Swagger API:  http://localhost:5200/swagger");
+Console.WriteLine("===========================================================");
+Console.WriteLine("\n\n");
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -149,8 +179,6 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
-app.MapControllers();
-app.MapRazorPages();
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
