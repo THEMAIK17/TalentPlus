@@ -36,7 +36,7 @@ docker compose up --build
    The system uses a Data Seeder that automatically creates the database, the schema, and an administrator user to facilitate immediate review.
     Service,URL,User Type,Credentials
 
-   Dashboard (Login),http://localhost:5200/Login,Administrator,User: admin@talentplus.comPassword: Password123!
+   Dashboard (Login),http://localhost:5200/Login,Administrator,User: admin@talentplus.com Password: Password123!
    Public API (Swagger),http://localhost:5200/swagger,Employee/Public,No login required
 
 ## Author
